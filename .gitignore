@@ -1,0 +1,35 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Bb]uild/
+[Dd]ist/
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.out
+*.pdb
+*.ilk
+*.exp
+*.pch
+*.gch
+
+# Code::Blocks generated files
+*.depend
+*.layout
+*.cbTemp
+
+# Temporary and backup files
+*.tmp
+*.temp
+*.bak
+*.orig
+*~
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
