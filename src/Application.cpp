@@ -39,13 +39,6 @@ bool Application::init() {
     return true;
 }
 
-void Application::run() {
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-}
-
 void Application::setTitle(const std::string& t){
     glfwSetWindowTitle(window, t.c_str());
 }

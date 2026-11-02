@@ -44,8 +44,7 @@ unsigned int indices[] = {
     20,21,22, 22,23,20   // bottom
 };
 
-Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scl, float angle)
-    : position(pos), rotation(rot), scale(scl), angle(angle) {
+Cube::Cube(glm::vec3 pos, glm::vec3 rot, glm::vec3 scl, float angle) : Object(pos, rot, scl, angle){
     init();
 }
 

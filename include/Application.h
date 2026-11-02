@@ -16,7 +16,6 @@ public:
     ~Application();
 
     bool init();       // Inicializa GLFW/GLEW
-    void run();        // Loop principal
     GLFWwindow* getWindow() const { return window; }
     void setTitle(const std::string& t);
 
