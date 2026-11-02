@@ -10,8 +10,8 @@ Camera::Camera(glm::vec3 initialPosition, glm::vec3 target, glm::vec3 upDirectio
     yaw = glm::degrees(glm::atan(front.z, front.x));
     pitch = glm::degrees(glm::asin(front.y));
 
-    movementSpeed = 3.0f;
-    rotationSpeed = 60.0f;
+    movementSpeed = 5.0f;
+    rotationSpeed = 50.0f;
 }
 
 glm::mat4 Camera::getView() {

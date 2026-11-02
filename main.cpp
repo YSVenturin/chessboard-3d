@@ -7,12 +7,15 @@
 #include "Chessboard.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Rook.h"
 
 int main() {
     Application app(1024, 768, "Chessboard3D");
     if (!app.init()) return -1;
 
     Chessboard chessboard;
+    Rook whiteRook(glm::vec3(-3.5f, 0.075f, 3.5f), glm::vec3(0.9f, 0.9f, 0.9f));
+    Rook blackRook(glm::vec3(-3.5f, 0.075f, -3.5f), glm::vec3(0.1f, 0.1f, 0.1f));
 
     // Shader
     Shader shader("vertex.glsl", "fragment.glsl");
@@ -55,6 +58,10 @@ int main() {
 
         // Draw chessboard.
         chessboard.draw(shader, model);
+
+        // draw test rook
+        whiteRook.draw(shader, model);
+        blackRook.draw(shader, model);
 
         // Swap buffers e eventos
         glfwSwapBuffers(app.getWindow());
