@@ -8,15 +8,13 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Rook.h"
-#include "Cylinder.h"
 
 int main() {
     Application app(1024, 768, "Chessboard3D");
     if (!app.init()) return -1;
 
     Chessboard chessboard;
-    Cylinder cylinder(glm::vec3(0.5f, 0.575f, 0.5f));
-    cylinder.scale = glm::vec3(0.8f, 1.0f, 0.8f);
+
     Rook whiteRook(glm::vec3(-3.5f, 0.075f, 3.5f), glm::vec3(0.9f, 0.9f, 0.9f));
     Rook blackRook(glm::vec3(-3.5f, 0.075f, -3.5f), glm::vec3(0.1f, 0.1f, 0.1f));
 
@@ -65,11 +63,6 @@ int main() {
         // draw test rook
         whiteRook.draw(shader, model);
         blackRook.draw(shader, model);
-
-        // draw test cylinder
-        shader.use();
-        shader.setVec3("objectColor", glm::vec3(0.2f, 0.6f, 0.9f));
-        cylinder.draw(shader, glm::mat4(1.0f));
 
         // Swap buffers e eventos
         glfwSwapBuffers(app.getWindow());
