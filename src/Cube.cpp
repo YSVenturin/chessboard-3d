@@ -1,7 +1,7 @@
 // Cube.cpp
 #include "Cube.h"
 
-float vertices[] = {
+static const float vertices[] = {
     // positions          // tex coords
     // back face
    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
@@ -35,7 +35,7 @@ float vertices[] = {
    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f
 };
 
-unsigned int indices[] = {
+static const unsigned int indices[] = {
     0,1,2, 2,3,0,        // back
     4,5,6, 6,7,4,        // front
     8,9,10, 10,11,8,     // left
