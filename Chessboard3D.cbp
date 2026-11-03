@@ -35,7 +35,7 @@
 			<Add directory="C:/glfw-3.4/deps" />
 			<Add directory="C:/glew-2.1.0/include" />
 			<Add directory="include" />
-			<Add directory="glm-1.0.3/glm" />
+			<Add directory="C:/glm" />
 		</Compiler>
 		<Linker>
 			<Add library="C:/glfw-3.4.bin.WIN64/lib-mingw-w64/libglfw3.a" />
@@ -55,6 +55,7 @@
 		<Unit filename="include/Cylinder.h" />
 		<Unit filename="include/King.h" />
 		<Unit filename="include/Knight.h" />
+		<Unit filename="include/Mouse.h" />
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/Pawn.h" />
 		<Unit filename="include/Queen.h" />
@@ -73,6 +74,7 @@
 		<Unit filename="src/Cylinder.cpp" />
 		<Unit filename="src/King.cpp" />
 		<Unit filename="src/Knight.cpp" />
+		<Unit filename="src/Mouse.cpp" />
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/Pawn.cpp" />
 		<Unit filename="src/Queen.cpp" />
