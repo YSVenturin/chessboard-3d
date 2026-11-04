@@ -1,8 +1,8 @@
 #include "ChessSet.h"
 
-ChessSet::ChessSet() {
-    float boardHeight = 0.075f;
+float boardHeight = 0.075f;
 
+ChessSet::ChessSet() {
     createSide(true, glm::vec3(0.9f, 0.9f, 0.9f), boardHeight);
     createSide(false, glm::vec3(0.15f, 0.15f, 0.15f), boardHeight);
 }
@@ -75,5 +75,92 @@ void ChessSet::draw(Shader& shader, glm::mat4 model) {
 
     for (King& king : kings) {
         king.draw(shader, model);
+    }
+}
+
+ChessPiece* ChessSet::findPiece(float x, float z) {
+    // search for piece at the center of the clicked tile
+    for (Pawn& pawn : pawns) {
+        if (pawn.position.x == x && pawn.position.z == z) {
+            return &pawn;
+        }
+    }
+
+    for (Rook& rook : rooks) {
+        if (rook.position.x == x && rook.position.z == z) {
+            return &rook;
+        }
+    }
+
+    for (Knight& knight : knights) {
+        if (knight.position.x == x && knight.position.z == z) {
+            return &knight;
+        }
+    }
+
+    for (Bishop& bishop : bishops) {
+        if (bishop.position.x == x && bishop.position.z == z) {
+            return &bishop;
+        }
+    }
+
+    for (Queen& queen : queens) {
+        if (queen.position.x == x && queen.position.z == z) {
+            return &queen;
+        }
+    }
+
+    for (King& king : kings) {
+        if (king.position.x == x && king.position.z == z) {
+            return &king;
+        }
+    }
+
+    return nullptr;
+}
+
+void ChessSet::clearSelection() {
+    if (selectedPiece != nullptr) {
+        selectedPiece->setSelected(false);
+        selectedPiece = nullptr;
+    }
+}
+
+void ChessSet::handleClick(const glm::vec3& point) {
+    // ignores click outside chessboard limit
+    if (point.x < -4.0f || point.x >= 4.0f || point.z < -4.0f || point.z >= 4.0f) {
+        return;
+    }
+
+    // ignores click if its bellow the board height
+    if (point.y < boardHeight) {
+        return;
+    }
+
+    // convert the clicked point to a round true index
+    // the centered board goes from -4 to +4, thats why we sum 4, so the index goes from 0 to 7
+    int column = static_cast<int>(point.x + 4.0f);
+    int row = static_cast<int>(point.z + 4.0f);
+
+    // a tile has 1x1 size, so 0.5 is the center
+    // the first tile center is on -3.5 x -3.5, so we subtract this from to discover the center
+    float centerX = column - 3.5f;
+    float centerZ = row - 3.5f;
+
+    ChessPiece* clickedPiece = findPiece(centerX, centerZ);
+    // if the user clicked a piece or a tile
+    if (clickedPiece != nullptr) {
+        clearSelection();
+        selectedPiece = clickedPiece;
+        selectedPiece->setSelected(true);
+        return;
+    }
+
+    // if a piece is selected and the user clicked on a tile
+    if (selectedPiece != nullptr) {
+        // move the piece to the empty tile
+        selectedPiece->position.x = centerX;
+        selectedPiece->position.z = centerZ;
+        clearSelection();
     }
 }

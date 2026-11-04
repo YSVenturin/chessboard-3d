@@ -7,7 +7,7 @@ Chessboard::Chessboard(){
 }
 
 void Chessboard::draw(Shader& shader, glm::mat4 model){
-    float centerOffset = (boardSize - 1) / 2.0f; // 3.5f when boardSize = 8
+    float centerOffset = 3.5f;
 
     for (int row = 0; row < boardSize; row++){
         for (int col = 0; col < boardSize; col++){
