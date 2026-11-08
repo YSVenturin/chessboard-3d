@@ -56,6 +56,10 @@
 		<Unit filename="include/King.h" />
 		<Unit filename="include/Knight.h" />
 		<Unit filename="include/Object.h" />
+		<Unit filename="include/PostProcessor.h" />
+		<Unit filename="include/Prism.h" />
+		<Unit filename="include/Pyramid.h" />
+		<Unit filename="include/Sphere.h" />
 		<Unit filename="include/Pawn.h" />
 		<Unit filename="include/Queen.h" />
 		<Unit filename="include/Rook.h" />
@@ -63,6 +67,8 @@
 		<Unit filename="include/Texture.h" />
 		<Unit filename="include/stb_image.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="postprocess_vertex.glsl" />
+		<Unit filename="postprocess_fragment.glsl" />
 		<Unit filename="src/Application.cpp" />
 		<Unit filename="src/Bishop.cpp" />
 		<Unit filename="src/Camera.cpp" />
@@ -74,6 +80,10 @@
 		<Unit filename="src/King.cpp" />
 		<Unit filename="src/Knight.cpp" />
 		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/PostProcessor.cpp" />
+		<Unit filename="src/Prism.cpp" />
+		<Unit filename="src/Pyramid.cpp" />
+		<Unit filename="src/Sphere.cpp" />
 		<Unit filename="src/Pawn.cpp" />
 		<Unit filename="src/Queen.cpp" />
 		<Unit filename="src/Rook.cpp" />
