@@ -3,8 +3,8 @@
 float boardHeight = 0.075f;
 
 ChessSet::ChessSet() {
-    createSide(true, glm::vec3(0.9f, 0.9f, 0.9f), boardHeight);
-    createSide(false, glm::vec3(0.15f, 0.15f, 0.15f), boardHeight);
+    createSide(true, glm::vec3(0.90f, 0.87f, 0.79f), boardHeight);
+    createSide(false, glm::vec3(0.19f, 0.22f, 0.28f), boardHeight);
 }
 
 void ChessSet::createSide(bool isWhite, glm::vec3 pieceColor, float boardHeight) {
@@ -53,27 +53,33 @@ void ChessSet::createSide(bool isWhite, glm::vec3 pieceColor, float boardHeight)
 }
 
 void ChessSet::draw(Shader& shader, glm::mat4 model) {
+    
+    int nextObjectId = 1;
+    shader.setFloat("materialShininess", 52.0f);
+    shader.setFloat("specularStrength", 0.28f);
+
     for (Pawn& pawn : pawns) {
+        shader.setInt("objectId", nextObjectId++);
         pawn.draw(shader, model);
     }
-
     for (Rook& rook : rooks) {
+        shader.setInt("objectId", nextObjectId++);
         rook.draw(shader, model);
     }
-
     for (Knight& knight : knights) {
+        shader.setInt("objectId", nextObjectId++);
         knight.draw(shader, model);
     }
-
     for (Bishop& bishop : bishops) {
+        shader.setInt("objectId", nextObjectId++);
         bishop.draw(shader, model);
     }
-
     for (Queen& queen : queens) {
+        shader.setInt("objectId", nextObjectId++);
         queen.draw(shader, model);
     }
-
     for (King& king : kings) {
+        shader.setInt("objectId", nextObjectId++);
         king.draw(shader, model);
     }
 }

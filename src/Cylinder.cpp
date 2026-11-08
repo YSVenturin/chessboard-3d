@@ -1,88 +1,6 @@
 #include "Cylinder.h"
-
-static const float vertices[] = {
-    // positions                       // tex coords
-
-    // Side: bottom ring (0-8)
-     0.500000f, -0.5f,  0.000000f,     0.000f, 0.0f,
-     0.353553f, -0.5f,  0.353553f,     0.125f, 0.0f,
-     0.000000f, -0.5f,  0.500000f,     0.250f, 0.0f,
-    -0.353553f, -0.5f,  0.353553f,     0.375f, 0.0f,
-    -0.500000f, -0.5f,  0.000000f,     0.500f, 0.0f,
-    -0.353553f, -0.5f, -0.353553f,     0.625f, 0.0f,
-     0.000000f, -0.5f, -0.500000f,     0.750f, 0.0f,
-     0.353553f, -0.5f, -0.353553f,     0.875f, 0.0f,
-     0.500000f, -0.5f,  0.000000f,     1.000f, 0.0f,
-
-    // Side: top ring (9-17)
-     0.500000f,  0.5f,  0.000000f,     0.000f, 1.0f,
-     0.353553f,  0.5f,  0.353553f,     0.125f, 1.0f,
-     0.000000f,  0.5f,  0.500000f,     0.250f, 1.0f,
-    -0.353553f,  0.5f,  0.353553f,     0.375f, 1.0f,
-    -0.500000f,  0.5f,  0.000000f,     0.500f, 1.0f,
-    -0.353553f,  0.5f, -0.353553f,     0.625f, 1.0f,
-     0.000000f,  0.5f, -0.500000f,     0.750f, 1.0f,
-     0.353553f,  0.5f, -0.353553f,     0.875f, 1.0f,
-     0.500000f,  0.5f,  0.000000f,     1.000f, 1.0f,
-
-    // Bottom cap: center (18)
-     0.000000f, -0.5f,  0.000000f,     0.500000f, 0.500000f,
-
-    // Bottom cap: ring (19-26)
-     0.500000f, -0.5f,  0.000000f,     1.000000f, 0.500000f,
-     0.353553f, -0.5f,  0.353553f,     0.853553f, 0.853553f,
-     0.000000f, -0.5f,  0.500000f,     0.500000f, 1.000000f,
-    -0.353553f, -0.5f,  0.353553f,     0.146447f, 0.853553f,
-    -0.500000f, -0.5f,  0.000000f,     0.000000f, 0.500000f,
-    -0.353553f, -0.5f, -0.353553f,     0.146447f, 0.146447f,
-     0.000000f, -0.5f, -0.500000f,     0.500000f, 0.000000f,
-     0.353553f, -0.5f, -0.353553f,     0.853553f, 0.146447f,
-
-    // Top cap: center (27)
-     0.000000f,  0.5f,  0.000000f,     0.500000f, 0.500000f,
-
-    // Top cap: ring (28-35)
-     0.500000f,  0.5f,  0.000000f,     1.000000f, 0.500000f,
-     0.353553f,  0.5f,  0.353553f,     0.853553f, 0.853553f,
-     0.000000f,  0.5f,  0.500000f,     0.500000f, 1.000000f,
-    -0.353553f,  0.5f,  0.353553f,     0.146447f, 0.853553f,
-    -0.500000f,  0.5f,  0.000000f,     0.000000f, 0.500000f,
-    -0.353553f,  0.5f, -0.353553f,     0.146447f, 0.146447f,
-     0.000000f,  0.5f, -0.500000f,     0.500000f, 0.000000f,
-     0.353553f,  0.5f, -0.353553f,     0.853553f, 0.146447f
-};
-
-static const unsigned int indices[] = {
-    // Side faces
-    0, 9, 10,    10, 1, 0,
-    1, 10, 11,   11, 2, 1,
-    2, 11, 12,   12, 3, 2,
-    3, 12, 13,   13, 4, 3,
-    4, 13, 14,   14, 5, 4,
-    5, 14, 15,   15, 6, 5,
-    6, 15, 16,   16, 7, 6,
-    7, 16, 17,   17, 8, 7,
-
-    // Bottom cap
-    18, 19, 20,
-    18, 20, 21,
-    18, 21, 22,
-    18, 22, 23,
-    18, 23, 24,
-    18, 24, 25,
-    18, 25, 26,
-    18, 26, 19,
-
-    // Top cap
-    27, 29, 28,
-    27, 30, 29,
-    27, 31, 30,
-    27, 32, 31,
-    27, 33, 32,
-    27, 34, 33,
-    27, 35, 34,
-    27, 28, 35
-};
+#include <vector>
+#include <cmath>
 
 Cylinder::Cylinder(glm::vec3 pos, glm::vec3 rot, glm::vec3 scl, float ang)
     : Object(pos, rot, scl, ang) {
@@ -90,40 +8,104 @@ Cylinder::Cylinder(glm::vec3 pos, glm::vec3 rot, glm::vec3 scl, float ang)
 }
 
 void Cylinder::init() {
+    const int segments = 8;
+    const float pi = 3.14159265359f;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
+    // Já tinha codigo pronto para gerar a estrutura dos cilindros
+    // Isso evita ter que manual ter que ficar ajustando as posições (tinha muitas kkkk)
+
+    // Laterais: anel inferior e superior
+    for (int ring = 0; ring < 2; ++ring) {
+        float y = (ring == 0) ? -0.5f : 0.5f;
+        float v = (ring == 0) ? 0.0f : 1.0f;
+        for (int i = 0; i <= segments; ++i) {
+            float angle = 2.0f * pi * static_cast<float>(i) / segments;
+            float x = 0.5f * std::cos(angle);
+            float z = 0.5f * std::sin(angle);
+            float nx = std::cos(angle);
+            float nz = std::sin(angle);
+            float u = static_cast<float>(i) / segments;
+            vertices.insert(vertices.end(), {x, y, z, nx, 0.0f, nz, u, v});
+        }
+    }
+
+    // Faces laterais (8 segmentos, dois triângulos por segmento)
+    for (int i = 0; i < segments; ++i) {
+        unsigned int bottom = static_cast<unsigned int>(i);
+        unsigned int top = static_cast<unsigned int>(segments + 1 + i);
+        indices.insert(indices.end(), {
+            bottom, top, top + 1,
+            top + 1, bottom + 1, bottom
+        });
+    }
+
+    // Tampa inferior: normal constante para -Y
+    const unsigned int bottomCenter = static_cast<unsigned int>(vertices.size() / 8);
+    vertices.insert(vertices.end(), {0.0f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.5f});
+    const unsigned int bottomRing = static_cast<unsigned int>(vertices.size() / 8);
+    for (int i = 0; i < segments; ++i) {
+        float angle = 2.0f * pi * static_cast<float>(i) / segments;
+        float x = 0.5f * std::cos(angle);
+        float z = 0.5f * std::sin(angle);
+        vertices.insert(vertices.end(), {x, -0.5f, z, 0.0f, -1.0f, 0.0f, 0.5f + x, 0.5f + z});
+    }
+    for (int i = 0; i < segments; ++i) {
+        unsigned int current = bottomRing + static_cast<unsigned int>(i);
+        unsigned int next = bottomRing + static_cast<unsigned int>((i + 1) % segments);
+        indices.insert(indices.end(), {bottomCenter, current, next});
+    }
+
+    // Tampa superior: normal constante para +Y
+    const unsigned int topCenter = static_cast<unsigned int>(vertices.size() / 8);
+    vertices.insert(vertices.end(), {0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f});
+    const unsigned int topRing = static_cast<unsigned int>(vertices.size() / 8);
+    for (int i = 0; i < segments; ++i) {
+        float angle = 2.0f * pi * static_cast<float>(i) / segments;
+        float x = 0.5f * std::cos(angle);
+        float z = 0.5f * std::sin(angle);
+        vertices.insert(vertices.end(), {x, 0.5f, z, 0.0f, 1.0f, 0.0f,
+                                         0.5f + x, 0.5f + z});
+    }
+    for (int i = 0; i < segments; ++i) {
+        unsigned int current = topRing + static_cast<unsigned int>(i);
+        unsigned int next = topRing + static_cast<unsigned int>((i + 1) % segments);
+        // ordem invertida para a face superior apontar para +Y
+        indices.insert(indices.end(), {topCenter, next, current});
+    }
+
+    indexCount = static_cast<GLsizei>(indices.size());
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
-
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-    // Position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    const GLsizei stride = 8 * sizeof(float);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
     glEnableVertexAttribArray(0);
-
-    // Texture coordinates
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 }
 
 void Cylinder::draw(Shader& shader, glm::mat4 model) {
     model = glm::translate(model, position);
-
     if (glm::length(rotation) > 0.0f)
         model = glm::rotate(model, glm::radians(angle), glm::normalize(rotation));
-
     model = glm::scale(model, scale);
 
     shader.setMat4("model", model);
-
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 96, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

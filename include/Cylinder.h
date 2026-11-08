@@ -11,5 +11,6 @@ public:
 
 private:
     unsigned int VAO, VBO, EBO;
+    GLsizei indexCount = 0;
     void init();
 };

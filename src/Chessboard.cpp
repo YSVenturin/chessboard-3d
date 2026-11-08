@@ -16,13 +16,19 @@ void Chessboard::draw(Shader& shader, glm::mat4 model){
 
             glm::vec3 tilePosition(x, 0.0f, z);
 
+            // O tabuleiro usa o ID zero: o pós-processamento só contorna peças
+            // Não vejo necessidade de contornar o tabuleiro
+            shader.setInt("objectId", 0);
+            shader.setFloat("materialShininess", 18.0f);
+            shader.setFloat("specularStrength", 0.10f);
+
             if ((row + col) % 2 == 0){
                 whiteTile.position = tilePosition;
-                shader.setVec3("objectColor", glm::vec3(0.9f, 0.9f, 0.9f));
+                shader.setVec3("objectColor", glm::vec3(0.78f, 0.80f, 0.82f));
                 whiteTile.draw(shader, model);
             } else {
                 blackTile.position = tilePosition;
-                shader.setVec3("objectColor", glm::vec3(0.15f, 0.15f, 0.15f));
+                shader.setVec3("objectColor", glm::vec3(0.075f, 0.095f, 0.13f));
                 blackTile.draw(shader, model);
             }
         }

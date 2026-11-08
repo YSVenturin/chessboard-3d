@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "ChessSet.h"
+#include "PostProcessor.h"
 
 bool lbutton_down = false;
 bool lbutton_click = false;
@@ -38,7 +39,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 }
 
 // find the visible point under the mouse
-bool getClickedPoint(GLFWwindow* window, double xpos, double ypos, const glm::mat4& view, const glm::mat4& projection, glm::vec3& point){
+bool getClickedPoint(GLFWwindow* window, double xpos, double ypos, const glm::mat4& view, const glm::mat4& projection, glm::vec3& point) {
     int width;
     int height;
     glfwGetWindowSize(window, &width, &height);
@@ -91,11 +92,18 @@ int main() {
 
     // Shader
     Shader shader("vertex.glsl", "fragment.glsl");
-    shader.use();
+    Shader postShader("postprocess_vertex.glsl", "postprocess_fragment.glsl");
 
     Camera camera(glm::vec3(7.0f, 8.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // turn on depth test
+    PostProcessor postProcessor;
+    int framebufferWidth, framebufferHeight;
+    glfwGetFramebufferSize(app.getWindow(), &framebufferWidth, &framebufferHeight);
+    if (!postProcessor.init(framebufferWidth, framebufferHeight)) {
+        std::cerr << "Não foi possível inicializar o framebuffer de pós-processamento.\n";
+        return -1;
+    }
+
     glEnable(GL_DEPTH_TEST);
 
     double previousTime = glfwGetTime();
@@ -113,26 +121,45 @@ int main() {
         if (glfwGetKey(app.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(app.getWindow(), true);
 
-        glClearColor(0.7f, 0.5f, 0.1f, 1.0f);
+        glfwGetFramebufferSize(app.getWindow(), &framebufferWidth, &framebufferHeight);
+        if (framebufferWidth <= 0 || framebufferHeight <= 0) {
+            glfwPollEvents();
+            continue;
+        }
+        if (!postProcessor.resize(framebufferWidth, framebufferHeight)) {
+            std::cerr << "Falha ao redimensionar o framebuffer.\n";
+            break;
+        }
 
+        // Primeira passagem: renderiza a cena completa em um framebuffer off-screen.
+        postProcessor.beginScene();
+        glEnable(GL_DEPTH_TEST);
+        glClearColor(0.16f, 0.20f, 0.27f, 1.0f); // background
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        const GLfloat backgroundObjectId[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+        glClearBufferfv(GL_COLOR, 1, backgroundObjectId);
 
         shader.use();
-
-        glm::mat4 model = glm::mat4(1.0f);
-
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+        glm::mat4 model(1.0f);
+        float aspectRatio = static_cast<float>(framebufferWidth) / static_cast<float>(framebufferHeight);
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
 
         // View tile from an upper diagonal position
         glm::mat4 view = camera.getView();
+
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
+        shader.setVec3("viewPos", camera.getPosition());
+        // Direção da superfície em direção à fonte de luz.
+        shader.setVec3("lightDirection", glm::normalize(glm::vec3(-0.45f, 1.0f, 0.55f)));
 
         // Draw chessboard
         chessboard.draw(shader, model);
-
         // draw pieces
-        chessSet.draw(shader, glm::mat4(1.0f));
+        chessSet.draw(shader, model);
+
+        // Segunda passagem: compõe a imagem e desenha contornos nas fronteiras entre IDs distintos. Todas as primitivas de uma mesma peça têm o mesmo ID.
+        postProcessor.render(postShader);
 
         // right button clear selection
         if (rbutton_click) {
@@ -143,11 +170,11 @@ int main() {
         // left button select and move piece
         if (lbutton_click) {
             glm::vec3 clickedPoint;
-
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, postProcessor.getFramebuffer());
             if (getClickedPoint(app.getWindow(), clickX, clickY, view, projection, clickedPoint)) {
                 chessSet.handleClick(clickedPoint);
             }
-
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
             lbutton_click = false;
         }
 

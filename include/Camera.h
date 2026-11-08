@@ -7,6 +7,7 @@ public:
     Camera(glm::vec3 initialPosition, glm::vec3 target, glm::vec3 upDirection);
     void processInput(GLFWwindow* window, float deltaTime);
     glm::mat4 getView();
+    glm::vec3 getPosition() const { return position; }
 
 private:
     glm::vec3 position;
