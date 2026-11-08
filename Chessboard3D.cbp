@@ -67,8 +67,10 @@
 		<Unit filename="include/Texture.h" />
 		<Unit filename="include/stb_image.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="postprocess_vertex.glsl" />
-		<Unit filename="postprocess_fragment.glsl" />
+		<Unit filename="shaders/vertex.glsl" />
+		<Unit filename="shaders/fragment.glsl" />
+		<Unit filename="shaders/postprocess_vertex.glsl" />
+		<Unit filename="shaders/postprocess_fragment.glsl" />
 		<Unit filename="src/Application.cpp" />
 		<Unit filename="src/Bishop.cpp" />
 		<Unit filename="src/Camera.cpp" />
