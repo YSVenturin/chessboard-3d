@@ -47,3 +47,12 @@ C:\glew-2.1.0\lib\Release\x64\glew32s.lib
 1. Install the dependencies and configure the paths above.
 2. Open `Chessboard3D.cbp` in Code::Blocks.
 3. Build and run the project.
+
+## Controls
+
+- `W`, `A`, `S`, `D`: move the camera.
+- Arrow keys: rotate the camera view.
+- `Q` / `Z`: move the camera up / down.
+- Left mouse button: select and move a piece.
+- Right mouse button: clear the current selection.
+- `R`: restore all chess pieces to their initial positions.
