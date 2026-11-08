@@ -1,6 +1,7 @@
 #pragma once
 #include "ChessPiece.h"
 #include "Cylinder.h"
+#include "Sphere.h"
 
 class Pawn : public ChessPiece {
 public:
@@ -9,5 +10,10 @@ public:
 
 private:
     Cylinder cylinderPart;
-    void drawCylinderPart(Shader& shader, glm::mat4 parentModel, glm::vec3 localPosition, glm::vec3 dimensions);
+    Sphere spherePart;
+
+    void drawCylinderPart(Shader& shader, glm::mat4 parentModel,
+                          glm::vec3 localPosition, glm::vec3 dimensions);
+    void drawSpherePart(Shader& shader, glm::mat4 parentModel,
+                        glm::vec3 localPosition, glm::vec3 dimensions);
 };
