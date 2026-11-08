@@ -91,8 +91,8 @@ int main() {
     ChessSet chessSet;
 
     // Shader
-    Shader shader("vertex.glsl", "fragment.glsl");
-    Shader postShader("postprocess_vertex.glsl", "postprocess_fragment.glsl");
+    Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    Shader postShader("shaders/postprocess_vertex.glsl", "shaders/postprocess_fragment.glsl");
 
     Camera camera(glm::vec3(7.0f, 8.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -106,6 +106,8 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
+    bool resetKeyWasPressed = false;
+
     double previousTime = glfwGetTime();
     double currentTime = glfwGetTime();
 
@@ -117,6 +119,13 @@ int main() {
         previousTime = currentTime;
 
         camera.processInput(app.getWindow(), timeDiff);
+
+        // Reset piece positions only once per key press (not every frame while R is held).
+        bool resetKeyIsPressed = glfwGetKey(app.getWindow(), GLFW_KEY_R) == GLFW_PRESS;
+        if (resetKeyIsPressed && !resetKeyWasPressed) {
+            chessSet.resetPositions();
+        }
+        resetKeyWasPressed = resetKeyIsPressed;
 
         if (glfwGetKey(app.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(app.getWindow(), true);

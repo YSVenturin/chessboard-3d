@@ -132,6 +132,42 @@ void ChessSet::clearSelection() {
     }
 }
 
+void ChessSet::resetPositions() {
+    // Deselect the current piece before restoring the initial board layout.
+    clearSelection();
+
+    // Pawns: the first 8 belong to White and the next 8 to Black.
+    for (std::size_t i = 0; i < pawns.size(); ++i) {
+        const bool isWhite = i < 8;
+        const int column = static_cast<int>(i % 8);
+        const float pawnRowZ = isWhite ? 2.5f : -2.5f;
+        pawns[i].position = glm::vec3(-3.5f + column, boardHeight, pawnRowZ);
+    }
+
+    // The remaining pieces are stored in pairs: White first, then Black.
+    for (int side = 0; side < 2; ++side) {
+        const bool isWhite = (side == 0);
+        const float backRowZ = isWhite ? 3.5f : -3.5f;
+        const std::size_t first = static_cast<std::size_t>(side * 2);
+
+        rooks[first].position = glm::vec3(-3.5f, boardHeight, backRowZ);
+        rooks[first + 1].position = glm::vec3(3.5f, boardHeight, backRowZ);
+
+        knights[first].position = glm::vec3(-2.5f, boardHeight, backRowZ);
+        knights[first + 1].position = glm::vec3(2.5f, boardHeight, backRowZ);
+        knights[first].rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+        knights[first + 1].rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+        knights[first].angle = isWhite ? 180.0f : 0.0f;
+        knights[first + 1].angle = isWhite ? 180.0f : 0.0f;
+
+        bishops[first].position = glm::vec3(-1.5f, boardHeight, backRowZ);
+        bishops[first + 1].position = glm::vec3(1.5f, boardHeight, backRowZ);
+
+        queens[side].position = glm::vec3(-0.5f, boardHeight, backRowZ);
+        kings[side].position = glm::vec3(0.5f, boardHeight, backRowZ);
+    }
+}
+
 void ChessSet::handleClick(const glm::vec3& point) {
     // ignores click outside chessboard limit
     if (point.x < -4.0f || point.x >= 4.0f || point.z < -4.0f || point.z >= 4.0f) {

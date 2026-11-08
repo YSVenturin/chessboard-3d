@@ -14,6 +14,7 @@ public:
     void draw(Shader& shader, glm::mat4 model);
     void handleClick(const glm::vec3& point);
     void clearSelection();
+    void resetPositions();
 
 private:
     std::vector<Pawn> pawns;
