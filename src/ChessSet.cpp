@@ -53,7 +53,7 @@ void ChessSet::createSide(bool isWhite, glm::vec3 pieceColor, float boardHeight)
 }
 
 void ChessSet::draw(Shader& shader, glm::mat4 model) {
-    
+
     int nextObjectId = 1;
     shader.setFloat("materialShininess", 52.0f);
     shader.setFloat("specularStrength", 0.28f);
@@ -174,8 +174,8 @@ void ChessSet::handleClick(const glm::vec3& point) {
         return;
     }
 
-    // ignores click if its bellow the board height
-    if (point.y < boardHeight) {
+    // ignores click if its bellow the board height (0.001 tolerance)
+    if (point.y < boardHeight - 0.001) {
         return;
     }
 
