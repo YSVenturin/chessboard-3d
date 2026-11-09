@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "ChessSet.h"
 #include "PostProcessor.h"
+#include "Texture.h"
 
 bool lbutton_down = false;
 bool lbutton_click = false;
@@ -94,6 +95,13 @@ int main() {
     Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl");
     Shader postShader("shaders/postprocess_vertex.glsl", "shaders/postprocess_fragment.glsl");
 
+    // Textures
+    Texture rockTexture("./Rock026_1K-JPG_Color.jpg");
+    Texture woodTexture("./Wood049_1K-JPG_Color.jpg");
+    shader.use();
+    shader.setInt("rockTexture", 0);
+    shader.setInt("woodTexture", 0);
+
     Camera camera(glm::vec3(7.0f, 8.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     PostProcessor postProcessor;
@@ -162,9 +170,16 @@ int main() {
         // Direção da superfície em direção à fonte de luz.
         shader.setVec3("lightDirection", glm::normalize(glm::vec3(-0.45f, 1.0f, 0.55f)));
 
-        // Draw chessboard
+        // draw board
+        woodTexture.bind(0);
+        shader.setFloat("woodStrength", 0.9f);
+        shader.setFloat("rockStrength", 0.0f);
         chessboard.draw(shader, model);
+
         // draw pieces
+        rockTexture.bind(0);
+        shader.setFloat("rockStrength", 0.5f);
+        shader.setFloat("woodStrength", 0.0f);
         chessSet.draw(shader, model);
 
         // Segunda passagem: compõe a imagem e desenha contornos nas fronteiras entre IDs distintos. Todas as primitivas de uma mesma peça têm o mesmo ID.
